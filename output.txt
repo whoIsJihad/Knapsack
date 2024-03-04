@@ -1,0 +1,39 @@
+12701
+Indices : 41 37 34 29 24 17 13 12 1 used weight : 659
+using the epsilon 
+Rounded Instance with Eps : 0.5
+theta = 8.40476
+Answer of reduced instance : 1512
+Answer of reduced instance multiplied by theta : 12708
+Indices : 41 39 27 24 19 11 10 5 4 Answer of original instance : 12674
+used weight = 649
+1.00213
+
+
+Rounded Instance with Eps : 0.2
+theta = 3.3619
+Answer of reduced instance : 3780
+Answer of reduced instance multiplied by theta : 12708
+Indices : 41 37 34 30 28 24 21 12 10 Answer of original instance : 12694
+used weight = 654
+1.00055
+
+
+Rounded Instance with Eps : 0.1
+theta = 1.68095
+Answer of reduced instance : 7560
+Answer of reduced instance multiplied by theta : 12708
+Indices : 41 37 34 29 24 17 13 12 1 Answer of original instance : 12701
+used weight = 659
+1
+
+
+Rounded Instance with Eps : 0.05
+theta = 0.840476
+Answer of reduced instance : 15113
+Answer of reduced instance multiplied by theta : 12702.1
+Indices : 41 37 34 29 24 17 13 12 1 Answer of original instance : 12701
+used weight = 659
+1
+
+

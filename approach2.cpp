@@ -2,7 +2,7 @@
 
 using namespace std;
 
-pair<int, vector<int>> knapsack(vector<int> &weights, vector<int> &values, int V)
+pair<int, vector<int>> knapsack(vector<int> &weights, vector<int> &values, int V, vector<vector<int>> &dp)
 {
 
     int n = weights.size();
@@ -12,7 +12,6 @@ pair<int, vector<int>> knapsack(vector<int> &weights, vector<int> &values, int V
     for (int i = 0; i < n; ++i)
         max_value += values[i];
 
-    vector<vector<int>> dp(n + 1, vector<int>(max_value + 1, 100000));
     // Base case: 0 weight needed to achieve value 0
     dp[0][0] = 0;
 
@@ -60,10 +59,10 @@ pair<int, vector<int>> knapsack(vector<int> &weights, vector<int> &values, int V
 
 int main()
 {
-    freopen("input.txt", "r", stdin);
+    freopen("in.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
 
-    int n,capacity;
+    int n, capacity;
     cin >> n >> capacity;
 
     vector<int> weights(n);
@@ -76,21 +75,24 @@ int main()
         max_value += values[i];
     }
 
-    int usedweight=0;
-    int  answerMain=0;
+    int usedweight = 0;
+    int answerMain = 0;
 
     // cout<<"without using the epsilon \n";
     int vmax = *max_element(values.begin(), values.end());
 
+    vector<vector<int>> dp(n + 1, vector<int>(max_value + 1, 100000));
+    auto ans = knapsack(weights, values, max_value, dp);
+
     for (int i = max_value; i >= 0; i--)
     {
-        if ((usedweight = knapsack(weights, values, i).first) <= capacity)
+        if ((usedweight = dp[n][i]) <= capacity)
         {
 
-            answerMain=i;
+            answerMain = i;
             cout << i << endl;
             cout << "Indices : ";
-            vector<int> selected_items = knapsack(weights, values, i).second;
+            vector<int> selected_items = knapsack(weights, values, i, dp).second;
             for (int item : selected_items)
             {
                 cout << item + 1 << " ";
@@ -98,47 +100,63 @@ int main()
             break;
         }
     }
-    cout <<"used weight : "<< usedweight << endl;
+    cout << "used weight : " << usedweight << endl;
+
+    cout << "using the epsilon \n";
+
+    //using the epsilon
 
 
-    cout<<"using the epsilon \n";
+
+
+
+
+
     vector<double> epsilons = {0.5, 0.2, 0.1, 0.05};
     for (auto epsilon : epsilons)
     {
-        cout<<"Rounded Instance with Eps : "<<epsilon<<"\n";
-        double theta =(epsilon * vmax*1.0/(2*n));
-        cout<<"theta = "<<theta<<endl;
 
+        cout << "Rounded Instance with Eps : " << epsilon << "\n";
+        //calculate scalinq factor
+        double theta = (epsilon * vmax * 1.0 / (2 * n));
+        cout << "theta = " << theta << endl;
+
+        //calculate new values
         vector<int> new_values;
         int new_max_value = 0;
-        for(int i=0;i<n;i++){
-            new_max_value += ceil(values[i]*1.0/theta);
-            new_values.push_back(ceil(values[i]*1.0/theta));
+        for (int i = 0; i < n; i++)
+        {
+            new_max_value += ceil(1.0 * values[i] / theta);
+            new_values.push_back(ceil(1.0 * values[i] / theta));
         }
 
+        
         int new_usedweight;
-        int answerOriginal=0;
+        int answerOriginal = 0;
+        vector<vector<int>> dp2(n + 1, vector<int>(new_max_value + 1, 100000));
+        auto ans2 = knapsack(weights, new_values, max_value, dp2);
 
         for (int i = new_max_value; i >= 0; i--)
         {
-            if ((new_usedweight = knapsack(weights, new_values, i).first) <= capacity)
+            if ((new_usedweight = dp2[n][i]) <= capacity)
             {
-                cout<<"Answer of reduced instance : "<<i<<endl;
-                cout<<"Answer of reduced instance multiplied by theta : "<<theta*i<<endl;
-                cout<<"Indices : ";
-                vector<int> selected_items = knapsack(weights, new_values, i).second;
+                cout << "Answer of reduced instance : " << i << endl;
+                cout << "Answer of reduced instance multiplied by theta : " << theta * i << endl;
+                cout << "Indices : ";
+                vector<int> selected_items = knapsack(weights, new_values, i, dp2).second;
                 for (int item : selected_items)
                 {
                     cout << item + 1 << " ";
-                    answerOriginal+=values[item];
+                    answerOriginal += values[item];
                 }
                 break;
             }
         }
-        cout<<"Answer of original instance : "<<answerOriginal<<endl;
+        cout << "Answer of original instance : " << answerOriginal << endl;
 
-        cout<<"used weight = ";
+        cout << "used weight = ";
         cout << new_usedweight << endl;
         cout<<(1.0*answerMain/answerOriginal)<<endl;
+        cout<<"\n\n";
     }
 }
