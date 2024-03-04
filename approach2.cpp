@@ -74,11 +74,11 @@ int main()
         cin >> values[i] >> weights[i];
         max_value += values[i];
     }
+    cout<<"Original instance  : "<<endl;
 
     int usedweight = 0;
     int answerMain = 0;
 
-    // cout<<"without using the epsilon \n";
     int vmax = *max_element(values.begin(), values.end());
 
     vector<vector<int>> dp(n + 1, vector<int>(max_value + 1, 100000));
@@ -90,7 +90,9 @@ int main()
         {
 
             answerMain = i;
+            cout<<"Answer : ";
             cout << i << endl;
+
             cout << "Indices : ";
             vector<int> selected_items = knapsack(weights, values, i, dp).second;
             for (int item : selected_items)
@@ -100,13 +102,7 @@ int main()
             break;
         }
     }
-    cout << "used weight : " << usedweight << endl;
-
-    cout << "using the epsilon \n";
-
-    //using the epsilon
-
-
+    cout << "\nUsed weight : " << usedweight << endl;
 
 
 
@@ -119,7 +115,7 @@ int main()
         cout << "Rounded Instance with Eps : " << epsilon << "\n";
         //calculate scalinq factor
         double theta = (epsilon * vmax * 1.0 / (2 * n));
-        cout << "theta = " << theta << endl;
+        cout << "theta : " << theta << endl;
 
         //calculate new values
         vector<int> new_values;
@@ -152,10 +148,11 @@ int main()
                 break;
             }
         }
-        cout << "Answer of original instance : " << answerOriginal << endl;
+        cout << "Answer of original instance (Rounded up): " << answerOriginal << endl;
 
-        cout << "used weight = ";
+        cout << "used weight : ";
         cout << new_usedweight << endl;
+        cout << "Ratio : ";
         cout<<(1.0*answerMain/answerOriginal)<<endl;
         cout<<"\n\n";
     }
